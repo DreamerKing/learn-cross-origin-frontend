@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Learn Cross Oringin</title>
+    <link rel="stylesheet" href="./lib/lib/jasmine-3.2.0/jasmine.css">
+    <script src="./lib/jquery-3.3.1.js"></script>
+    <script src="./lib/lib/jasmine-3.2.0/jasmine.js"></script>
+    <script src="./lib/lib/jasmine-3.2.0/jasmine-html.js"></script>
+    <script src="./lib/lib/jasmine-3.2.0/boot.js"></script>
+</head>
+<body>
+    <!-- <a href="#" onclick="get1()" >发起get1请求</a>
+    <img src="http://localhost:8080/test/get1" alt="image get"> -->
+</body>
+<script>
+
+    /* function get1(){
+        $.getJSON("http://localhost:8080/test/get1").then(function(result){
+            console.log(result);
+        })
+    } */
+
+/*
+跨域是浏览器出于安全考虑对发出的请求做了限制
+为什么会发生AJAX跨域？
+1. 浏览器限制
+2. 跨域(协议，端口，域名任意一个不一样)
+3. XHR请求
+
+解决思路
+1. 浏览器设置(需要改变用户浏览器设置，不常用) --disable-web-security --user-data-dir=xxx
+2. JSONP (动态创建html标签)(后端需要改动,只支持Get,发出的不是XHR请求)
+3. 跨域 
+    3.1 被调用方(支持跨域)(添加响应头)
+    3.2 调用方(隐藏跨域)(通过代理)
+
+    被调用方的Fitler解决方案
+    浏览先执行后判断
+    跨域请求的请求头多了Origin字段，其值是当前域名信息
+
+    简单请求
+    方法为：GET, HEAD, POST
+    请求header里无自定义头，Content-Type为：text/plain, multipart/form-data, application/x-www-form-urlencoded之一
+
+    非简单请求(请求之前会发预检命令Option)
+    方法为：put,delete
+    发送json格式数据的ajax请求
+    带自定义ajax请求
+
+    请求头字段：
+    Access-Control-Request-Headers
+    Content-Type
+
+*/
+    var base = "http://localhost:8080/test";
+     jasmine.DEFAULT_TMIEOUT_INTERVAL = 1000;
+/*     
+   
+    
+    describe("cross origin", function(){
+        it("get1", function(done){
+            var result;
+            $.getJSON(base + "/get1").then(function(res){
+                console.log(res, "test")
+                result = res;
+            });
+            setTimeout(() => {
+               expect(result).toEqual({
+                   "data": "get1 ok"
+               }); 
+               done();
+            }, 1000);
+        });
+    });
+
+    describe("cross origin2", function () {
+            it("jsonp get1", function (done) {
+                var result;
+                $.ajax({
+                    url: base + "/get1",
+                    dataType: "jsonp",
+                    jsonp: "cb",
+                    cache: true
+                }).then(function (res) {
+                    console.log(res, "test")
+                    result = res;
+                }).catch(err => {
+                    console.log(err, "error")
+                });
+                setTimeout(() => {
+                    expect(result).toEqual({
+                        "data": "get1 ok"
+                    });
+                    done();
+                }, 1000);
+            });
+        }); */
+
+        describe("cross origin3", function () {
+                it("postJson()", function (done) {
+                    var result;
+                    $.ajax({
+                        type: "post",
+                        url: base + "/postjson",
+                        contentType: "application/json;charset=utf-8",
+                        data: JSON.stringify({name: "Dreamer King"})
+                        }).then(function (res) {
+                        console.log(res, "test")
+                        result = res;
+                    });
+                    setTimeout(() => {
+                        expect(result).toEqual({
+                            "data": "postJsonDreamer King"
+                        });
+                        done();
+                    }, 1000);
+                });
+            });
+</script>
+</html>
