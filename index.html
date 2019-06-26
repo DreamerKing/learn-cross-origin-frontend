@@ -55,7 +55,7 @@
     Content-Type
 
 */
-    var base = "http://localhost:8080/test";
+    var base = "api";
      jasmine.DEFAULT_TMIEOUT_INTERVAL = 1000;
 /*     
    
@@ -107,8 +107,8 @@
                         url: base + "/postjson",
                         contentType: "application/json;charset=utf-8",
                         data: JSON.stringify({name: "Dreamer King"})
-                        }).then(function (res) {
-                        console.log(res, "test")
+                        })
+                        .then(function (res) {
                         result = res;
                     });
                     setTimeout(() => {
@@ -119,5 +119,58 @@
                     }, 1000);
                 });
             });
+
+             describe("cross origin4", function () {
+                    it("getCoookie()", function (done) {
+                        var result;
+                        $.ajax({
+                            type: "get",
+                            url: base + "/getCookies",
+                            xhrFields: {
+                                withCredentials: true
+                            },
+                            // contentType: "application/json;charset=utf-8",
+                            // data: JSON.stringify({ name: "Dreamer King" })
+                        })
+                        .then(function (res) {
+                            console.log(res, "ddd")
+                                result = res;
+                        });
+                        setTimeout(() => {
+                            console.log(result, "co");
+                            expect(result).toEqual({
+                                "data": "getCookieDreamerKing"
+                            });
+                            done();
+                        }, 1000);
+                    });
+                });
+
+                  describe("cross origin5", function () {
+                        it("defined header", function (done) {
+                            var result;
+                            $.ajax({
+                                type: "get",
+                                url: base + "/getHeaders",
+                                headers: {
+                                  "x-header-1": "King"  
+                                },
+                                beforeSend: function(xhr){
+                                   xhr.setRequestHeader("x-header-2", "dreamer") 
+                                }
+                                // contentType: "application/json;charset=utf-8",
+                                // data: JSON.stringify({ name: "Dreamer King" })
+                            })
+                                .then(function (res) {
+                                    result = res;
+                                });
+                            setTimeout(() => {
+                                expect(result).toEqual({
+                                    "data": "getHeaders King dreamer"
+                                });
+                                done();
+                            }, 1000);
+                        });
+                    });
 </script>
 </html>
